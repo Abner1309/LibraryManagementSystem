@@ -16,6 +16,12 @@ public class BookService {
         if (book.getTitle().isEmpty() || book.getAuthor().isEmpty() || book.getIsbn().isEmpty()) {
             throw new RuntimeException("There are empty field.");
         }
+
+        Book searchBook = bookRepository.findByIsbn(book.getIsbn()).orElse(null);
+        if (searchBook != null) {
+            throw new RuntimeException("Book already exists.");
+        }
+
         bookRepository.save(book);
     }
 
