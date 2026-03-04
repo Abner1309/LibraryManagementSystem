@@ -2,6 +2,7 @@ package com.library.api.service;
 
 import com.library.api.model.Book;
 import com.library.api.repository.BookRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,8 @@ import java.util.Optional;
 public class BookService {
     private final BookRepository bookRepository;
 
-    private void saveBook(Book book) {
+    @Transactional
+    public void saveBook(Book book) {
         if (book.getTitle().isEmpty() || book.getAuthor().isEmpty() || book.getIsbn().isEmpty()) {
             throw new RuntimeException("There are empty field.");
         }
@@ -25,15 +27,15 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    private List<Book> listAll() {
+    public List<Book> listAll() {
         return bookRepository.findAll();
     }
 
-    private Book findById(Long id) {
+    public Book findById(Long id) {
         return bookRepository.findById(id).orElse(null);
     }
 
-    private List<Book> findByAuthor(String author) {
+    public List<Book> findByAuthor(String author) {
         List<Book> books = bookRepository.findByAuthor(author);
         if (books.isEmpty()) {
             throw new RuntimeException("There is no such book.");
@@ -41,7 +43,7 @@ public class BookService {
         return books;
     }
 
-    private List<Book> findByTitle(String title) {
+    public List<Book> findByTitle(String title) {
         List<Book> books = bookRepository.findByTitle(title);
         if (books.isEmpty()) {
             throw new RuntimeException("There is no such book.");
@@ -49,11 +51,12 @@ public class BookService {
         return books;
     }
 
-    private Optional<Book> findByIsbn(String isbn) {
+    public Optional<Book> findByIsbn(String isbn) {
         return bookRepository.findByIsbn(isbn);
     }
 
-    private void updateBook(Long id, Book updatedBook) {
+    @Transactional
+    public void updateBook(Long id, Book updatedBook) {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
             throw new RuntimeException("Book not found.");
@@ -64,7 +67,8 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    private void deleteBook(Long id) {
+    @Transactional
+    public void deleteBook(Long id) {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
             throw new RuntimeException("Book not found.");
