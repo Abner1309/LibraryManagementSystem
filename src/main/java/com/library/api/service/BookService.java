@@ -14,17 +14,12 @@ public class BookService {
     private final BookRepository bookRepository;
 
     @Transactional
-    public void saveBook(Book book) {
-        if (book.getTitle().isEmpty() || book.getAuthor().isEmpty() || book.getIsbn().isEmpty()) {
-            throw new RuntimeException("There are empty field.");
-        }
-
+    public boolean saveBook(Book book) {
+        if (book.getTitle().isEmpty() || book.getAuthor().isEmpty() || book.getIsbn().isEmpty()) { return false; }
         Book searchBook = bookRepository.findByIsbn(book.getIsbn()).orElse(null);
-        if (searchBook != null) {
-            throw new RuntimeException("Book already exists.");
-        }
-
+        if (searchBook != null) { return false; }
         bookRepository.save(book);
+        return true;
     }
 
     public List<Book> listAll() {
@@ -37,17 +32,13 @@ public class BookService {
 
     public List<Book> findByAuthor(String author) {
         List<Book> books = bookRepository.findByAuthor(author);
-        if (books.isEmpty()) {
-            throw new RuntimeException("There is no such book.");
-        }
+        if (books.isEmpty()) { books = null; }
         return books;
     }
 
     public List<Book> findByTitle(String title) {
         List<Book> books = bookRepository.findByTitle(title);
-        if (books.isEmpty()) {
-            throw new RuntimeException("There is no such book.");
-        }
+        if (books.isEmpty()) { books = null; }
         return books;
     }
 
@@ -56,23 +47,21 @@ public class BookService {
     }
 
     @Transactional
-    public void updateBook(Long id, Book updatedBook) {
+    public boolean updateBook(Long id, Book updatedBook) {
         Book book = bookRepository.findById(id).orElse(null);
-        if (book == null) {
-            throw new RuntimeException("Book not found.");
-        }
+        if (book == null) { return false; }
         book.setTitle(updatedBook.getTitle());
         book.setAuthor(updatedBook.getAuthor());
         book.setIsbn(updatedBook.getIsbn());
         bookRepository.save(book);
+        return true;
     }
 
     @Transactional
-    public void deleteBook(Long id) {
+    public boolean deleteBook(Long id) {
         Book book = bookRepository.findById(id).orElse(null);
-        if (book == null) {
-            throw new RuntimeException("Book not found.");
-        }
+        if (book == null) { return false; }
         bookRepository.delete(book);
+        return true;
     }
 }
