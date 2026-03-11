@@ -2,9 +2,9 @@ package com.library.api.service;
 
 import com.library.api.model.Book;
 import com.library.api.repository.BookRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +15,8 @@ public class BookService {
 
     @Transactional
     public boolean saveBook(Book book) {
-        if (book.getTitle().isEmpty() || book.getAuthor().isEmpty() || book.getIsbn().isEmpty()) { return false; }
-        Book searchBook = bookRepository.findByIsbn(book.getIsbn()).orElse(null);
+        if (book.getTitle().isEmpty() || book.getIsbn().isEmpty()) { return false; }
+        Book searchBook = bookRepository.findByIsbn(book.getIsbn());
         if (searchBook != null) { return false; }
         bookRepository.save(book);
         return true;
@@ -30,19 +30,13 @@ public class BookService {
         return bookRepository.findById(id).orElse(null);
     }
 
-    public List<Book> findByAuthor(String author) {
-        List<Book> books = bookRepository.findByAuthor(author);
-        if (books.isEmpty()) { books = null; }
-        return books;
-    }
-
     public List<Book> findByTitle(String title) {
         List<Book> books = bookRepository.findByTitle(title);
         if (books.isEmpty()) { books = null; }
         return books;
     }
 
-    public Optional<Book> findByIsbn(String isbn) {
+    public Book findByIsbn(String isbn) {
         return bookRepository.findByIsbn(isbn);
     }
 

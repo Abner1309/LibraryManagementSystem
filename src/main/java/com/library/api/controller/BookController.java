@@ -34,13 +34,6 @@ public class BookController {
         return ResponseEntity.ok().body(book);
     }
 
-    @GetMapping("/{author}")
-    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable String author) {
-        List<Book> books = bookService.findByAuthor(author);
-        if (books == null) { return ResponseEntity.notFound().build(); }
-        return ResponseEntity.ok().body(books);
-    }
-
     @GetMapping("/{title}")
     public ResponseEntity<List<Book>> getBooksByTitle(@PathVariable String title) {
         List<Book> books = bookService.findByTitle(title);
@@ -50,20 +43,20 @@ public class BookController {
 
     @GetMapping("/{isbn}")
     public ResponseEntity<Book> getBooksByIsbn(@PathVariable String isbn) {
-        return bookService.findByIsbn(isbn)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Book book = bookService.findByIsbn(isbn);
+        if (book == null) { return ResponseEntity.notFound().build(); }
+        return ResponseEntity.ok().body(book);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateBook(@PathVariable Long id, @RequestBody Book book) {
-        if (!bookService.updateBook(id, book)) { return ResponseEntity.badRequest().body("Please check the fields again."); }
+        if (!bookService.updateBook(id, book)) { return ResponseEntity.badRequest().body("The book could not be updated."); }
         return ResponseEntity.ok().body("Book updated successfully.");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Long id) {
-        if (!bookService.deleteBook(id)) { return ResponseEntity.badRequest().body("Please check the fields again."); }
+        if (!bookService.deleteBook(id)) { return ResponseEntity.badRequest().body("The book could not be deleted."); }
         return ResponseEntity.ok().body("Book deleted successfully.");
     }
 }
