@@ -1,7 +1,7 @@
 package com.library.api.exception;
 
 public class BookAlreadyRegisteredException extends RuntimeException {
-    public BookAlreadyRegisteredException(String message) {
-        super(message);
+    public BookAlreadyRegisteredException() {
+        super("The Book Already Registered.");
     }
 }

@@ -16,6 +16,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, "Book Already Registered", e.getMessage(), request);
     }
 
+    @ExceptionHandler(BookNotExistException.class)
+    public ResponseEntity<StandardError> bookNotExist(BookNotExistException e, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, "Book Not Exist", e.getMessage(), request);
+    }
+
     private ResponseEntity<StandardError> buildResponse(HttpStatus status, String error, String message, HttpServletRequest request) {
         StandardError err = new StandardError(Instant.now(), status.value(), error, message, request.getRequestURI());
         return ResponseEntity.status(status).body(err);

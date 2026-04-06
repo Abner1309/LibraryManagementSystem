@@ -1,7 +1,7 @@
 package com.library.api.exception;
 
 public class BookNotExistException extends RuntimeException {
-    public BookNotExistException(String message) {
-        super(message);
+    public BookNotExistException() {
+        super("The Book Does Not Exist.");
     }
 }
