@@ -31,17 +31,22 @@ public class BookService {
 
     public List<BookResponseDTO> listAll() {
         List<Book> books = bookRepository.findAll();
+        if (books.isEmpty()) {
+            throw new BookNotExistException();
+        }
         return books.stream().map(BookResponseDTO::new).collect(Collectors.toList());
     }
 
     public BookResponseDTO findById(Long id) {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(BookNotExistException::new);
+        Book book = bookRepository.findById(id).orElseThrow(BookNotExistException::new);
         return new BookResponseDTO(book);
     }
 
     public List<BookResponseDTO> findByTitle(String title) {
         List<Book> books = bookRepository.findByTitle(title);
+        if (books.isEmpty()) {
+            throw new BookNotExistException();
+        }
         return books.stream().map(BookResponseDTO::new).collect(Collectors.toList());
     }
 
