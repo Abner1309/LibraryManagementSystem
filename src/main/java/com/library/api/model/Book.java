@@ -1,6 +1,7 @@
 package com.library.api.model;
 
 import com.library.api.dto.BookCreateDTO;
+import com.library.api.dto.BookUpdateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,11 @@ public class Book {
         this.title = dto.title();
         this.isbn = dto.isbn();
         this.author = dto.author();
+    }
+
+    public void updateBook(BookUpdateDTO dto) {
+        this.setTitle(dto.title());
+        this.setIsbn(dto.isbn());
+        this.setAuthor(dto.author());
     }
 }
