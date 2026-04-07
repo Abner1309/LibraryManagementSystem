@@ -18,7 +18,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookNotExistException.class)
     public ResponseEntity<StandardError> bookNotExist(BookNotExistException e, HttpServletRequest request) {
-        return buildResponse(HttpStatus.BAD_REQUEST, "Book Not Exist", e.getMessage(), request);
+        return buildResponse(HttpStatus.BAD_REQUEST, "Book Does Not Exist", e.getMessage(), request);
+    }
+
+    @ExceptionHandler(AuthorNotExistException.class)
+    public ResponseEntity<StandardError> authorNotExist(AuthorNotExistException e, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, "Author Does Not Exist", e.getMessage(), request);
     }
 
     private ResponseEntity<StandardError> buildResponse(HttpStatus status, String error, String message, HttpServletRequest request) {
