@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long> {
     public List<Book> findByTitle(String title);
     public Book findByIsbn(String isbn);
+    public boolean existsByIsbn(String isbn);
 }

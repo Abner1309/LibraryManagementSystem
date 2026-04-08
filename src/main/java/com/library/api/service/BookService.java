@@ -20,8 +20,7 @@ public class BookService {
 
     @Transactional
     public BookResponseDTO saveBook(BookCreateDTO dto) {
-        Book verify = bookRepository.findByIsbn(dto.isbn());
-        if (verify != null) {
+        if (bookRepository.existsByIsbn(dto.isbn())) {
             throw new BookAlreadyRegisteredException();
         }
         Book book = new Book(dto);
