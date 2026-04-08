@@ -8,4 +8,5 @@ import java.util.List;
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     public List<Author> findByName(String name);
     public List<Author> findByNationality(String nationality);
+    public boolean existsByNameAndNationality(String name, String nationality);
 }
