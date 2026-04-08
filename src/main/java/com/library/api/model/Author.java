@@ -1,6 +1,7 @@
 package com.library.api.model;
 
 import com.library.api.dto.AuthorCreateDTO;
+import com.library.api.dto.AuthorUpdateDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +26,10 @@ public class Author {
     public Author(AuthorCreateDTO dto) {
         this.name = dto.name();
         this.nationality = dto.nationality();
+    }
+
+    public void updateAuthor(AuthorUpdateDTO dto) {
+        this.setName(dto.name());
+        this.setNationality(dto.nationality());
     }
 }
