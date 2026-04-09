@@ -1,5 +1,8 @@
 package com.library.api.controller;
 
+import com.library.api.dto.AuthorCreateDTO;
+import com.library.api.dto.AuthorResponseDTO;
+import com.library.api.dto.AuthorUpdateDTO;
 import com.library.api.model.Author;
 import com.library.api.service.AuthorService;
 import lombok.AllArgsConstructor;
@@ -15,47 +18,44 @@ public class AuthorController {
     private AuthorService authorService;
 
     @PostMapping
-    public ResponseEntity<String> addAuthor(@RequestBody Author author) {
-        if (!authorService.saveAuthor(author)) { return ResponseEntity.badRequest().body("Please check the fields again."); }
-        return ResponseEntity.ok().body("Author added successfully.");
+    public ResponseEntity<AuthorResponseDTO> addAuthor(@RequestBody AuthorCreateDTO author) {
+        AuthorResponseDTO newAuthor = authorService.saveAuthor(author);
+        return ResponseEntity.ok().body(newAuthor);
     }
 
     @GetMapping
-    public ResponseEntity<List<Author>> getAllAuthors() {
-        List<Author> authors = authorService.findAll();
+    public ResponseEntity<List<AuthorResponseDTO>> getAllAuthors() {
+        List<AuthorResponseDTO> authors = authorService.findAll();
         return ResponseEntity.ok().body(authors);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable Long id) {
-        Author author = authorService.findById(id);
-        if (author == null) { return ResponseEntity.notFound().build(); }
+    public ResponseEntity<AuthorResponseDTO> getAuthorById(@PathVariable Long id) {
+        AuthorResponseDTO author = authorService.findById(id);
         return ResponseEntity.ok().body(author);
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<List<Author>> getAuthorByName(@PathVariable String name) {
-        List<Author> author = authorService.findByName(name);
-        if (author == null) { return ResponseEntity.notFound().build(); }
+    public ResponseEntity<List<AuthorResponseDTO>> getAuthorByName(@PathVariable String name) {
+        List<AuthorResponseDTO> author = authorService.findByName(name);
         return ResponseEntity.ok().body(author);
     }
 
     @GetMapping("/{nationality}")
-    public ResponseEntity<List<Author>> getAuthorByNationality(@PathVariable String nationality) {
-        List<Author> author = authorService.findByNationality(nationality);
-        if (author == null) { return ResponseEntity.notFound().build(); }
-        return ResponseEntity.ok().body(author);
+    public ResponseEntity<List<AuthorResponseDTO>> getAuthorByNationality(@PathVariable String nationality) {
+        List<AuthorResponseDTO> authors = authorService.findByNationality(nationality);
+        return ResponseEntity.ok().body(authors);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAuthor(@PathVariable Long id, @RequestBody Author author) {
-        if (!authorService.updateAuthor(id, author)) { return ResponseEntity.badRequest().body("The author could not be updated."); }
-        return ResponseEntity.ok().body("Book updated successfully.");
+    public ResponseEntity<AuthorResponseDTO> updateAuthor(@RequestBody AuthorUpdateDTO author) {
+        AuthorResponseDTO newAuthor = authorService.updateAuthor(author);
+        return ResponseEntity.ok().body(newAuthor);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAuthor(@PathVariable Long id) {
-        if (!authorService.deleteAuthor(id)) { return ResponseEntity.badRequest().body("The author could not be deleted."); }
-        return ResponseEntity.ok().body("Book deleted successfully.");
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+        authorService.deleteAuthor(id);
+        return ResponseEntity.noContent().build();
     }
 }
