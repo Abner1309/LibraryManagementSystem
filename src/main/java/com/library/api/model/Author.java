@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class Author {
     private String name;
     private String nationality;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
     public Author(AuthorCreateDTO dto) {
         this.name = dto.name();
