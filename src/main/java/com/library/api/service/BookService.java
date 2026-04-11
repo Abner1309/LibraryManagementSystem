@@ -3,9 +3,12 @@ package com.library.api.service;
 import com.library.api.dto.BookCreateDTO;
 import com.library.api.dto.BookResponseDTO;
 import com.library.api.dto.BookUpdateDTO;
+import com.library.api.exception.AuthorNotExistException;
 import com.library.api.exception.BookAlreadyRegisteredException;
 import com.library.api.exception.BookNotExistException;
+import com.library.api.model.Author;
 import com.library.api.model.Book;
+import com.library.api.repository.AuthorRepository;
 import com.library.api.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,13 +20,16 @@ import java.util.stream.Collectors;
 @Service @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
 
     @Transactional
     public BookResponseDTO saveBook(BookCreateDTO dto) {
         if (bookRepository.existsByIsbn(dto.isbn())) {
             throw new BookAlreadyRegisteredException();
         }
+        Author author = authorRepository.findById(dto.authorId()).orElseThrow(AuthorNotExistException::new);
         Book book = new Book(dto);
+        book.setAuthor(author);
         book = bookRepository.save(book);
         return new BookResponseDTO(book);
     }

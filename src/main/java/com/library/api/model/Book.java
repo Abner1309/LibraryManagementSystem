@@ -24,12 +24,10 @@ public class Book {
     public Book(BookCreateDTO dto) {
         this.title = dto.title();
         this.isbn = dto.isbn();
-        this.author = dto.author();
     }
 
     public void updateBook(BookUpdateDTO dto) {
         this.setTitle(dto.title());
         this.setIsbn(dto.isbn());
-        this.setAuthor(dto.author());
     }
 }
